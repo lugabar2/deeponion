@@ -3744,7 +3744,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 
 				logText = "2-of-3 Multisig Address created. Address = " + multiSigAddress + ".";
 				pCurrentAnonymousTxInfo->AddToLog(logText);
-				logText = "Redeem Script = " + redeemScript.substr(0, 30) + ".";
+				logText = "Redeem Script = " + redeemScript + ".";
 				pCurrentAnonymousTxInfo->AddToLog(logText);
 
 				b = pwalletMain->SignMessageUsingAddress(multiSigAddress, guarantorAddress, vchSig);
@@ -3817,7 +3817,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 			pCurrentAnonymousTxInfo->SetMultiSigAddress(multiSigAddress, redeemScript);
 			std::string logText = "Received 2-of-3 Multisig Address. Address = " + multiSigAddress + ".";
 			pCurrentAnonymousTxInfo->AddToLog(logText);
-			logText = "Received Redeem Script = " + redeemScript.substr(0, 30) + "...";
+			logText = "Received Redeem Script = " + redeemScript + ".";
 			pCurrentAnonymousTxInfo->AddToLog(logText);
 
 			// may need to do it in sequence
@@ -4065,7 +4065,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 			pCurrentAnonymousTxInfo->SetVoutAndScriptPubKey(ROLE_MIXER, voutnMixer, pkMixer);
 			pCurrentAnonymousTxInfo->SetVoutAndScriptPubKey(ROLE_GUARANTOR, voutnGuarantor, pkGuarantor);
 
-			std::string logText = "Received multisig distribution transaction. TxID = " + multisigtx.substr(0, 30) + "...";
+			std::string logText = "Received multisig distribution transaction. TxID = " + multisigtx + ".";
 			pCurrentAnonymousTxInfo->AddToLog(logText);
 			logText = "Received TxIns information.";
 			pCurrentAnonymousTxInfo->AddToLog(logText);

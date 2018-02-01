@@ -2930,10 +2930,17 @@ void CWallet::UpdateAnonymousServiceList(CNode* pNode, std::string keyAddress, s
 
 	string addrName = pNode->addrName;
 	string addr = addrName.substr(0, addrName.find(":"));
+	// printf(">> addrName = %s\n", addrName.c_str());
+	// printf(">> addr = %s\n", addr.c_str());	
 
 	// remove ipv6 address
 	string ipv6 = "[";
 	if(addr.find(ipv6) != std::string::npos)
+		return;
+	
+	// remove non-onion address
+	string onion = ".onion";
+	if(addr.find(onion) == std::string::npos)
 		return;
 
 	if(fDebugAnon)

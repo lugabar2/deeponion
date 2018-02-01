@@ -156,23 +156,33 @@ bool CCryptoKeyStore::GetKey(const CKeyID &address, CKey& keyOut) const
 {
     {
         LOCK(cs_KeyStore);
-        if (!IsCrypted())
-            return CBasicKeyStore::GetKey(address, keyOut);
-
+        if (!IsCrypted()) {
+        	printf(">> un-encrypted key..\n");
+        	return CBasicKeyStore::GetKey(address, keyOut);
+        }
+            
         CryptedKeyMap::const_iterator mi = mapCryptedKeys.find(address);
         if (mi != mapCryptedKeys.end())
         {
+        	printf(">> found key..\n");
             const CPubKey &vchPubKey = (*mi).second.first;
             const std::vector<unsigned char> &vchCryptedSecret = (*mi).second.second;
             CSecret vchSecret;
-            if (!DecryptSecret(vMasterKey, vchCryptedSecret, vchPubKey.GetHash(), vchSecret))
+            if (!DecryptSecret(vMasterKey, vchCryptedSecret, vchPubKey.GetHash(), vchSecret)) {
+            	printf(">> Can't decrypt secret\n");
                 return false;
-            if (vchSecret.size() != 32)
+            }
+            if (vchSecret.size() != 32) {
+            	printf(">> vchSecret size not 32.\n");
                 return false;
+            }
+            
             keyOut.SetPubKey(vchPubKey);
             keyOut.SetSecret(vchSecret);
             return true;
         }
+        
+    	printf(">> Not found key..");
     }
     return false;
 }
