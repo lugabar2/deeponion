@@ -232,7 +232,6 @@ Value stop(const Array& params, bool fHelp)
 // Call Table
 //
 
-
 static const CRPCCommand vRPCCommands[] =
 { //  name                      function                 safemd  unlocked
   //  ------------------------  -----------------------  ------  --------
@@ -310,6 +309,14 @@ static const CRPCCommand vRPCCommands[] =
     { "sendalert",              &sendalert,              false,  false},
     { "getlastanontxinfo",      &getlastanontxinfo,      true,   false},
     { "listservicenodes",       &listservicenodes,       true,   false},
+	
+    {"getnewstealthaddress", 	&getnewstealthaddress, 	false, false},
+    {"liststealthaddresses", 	&liststealthaddresses, 	false, false},
+    {"importstealthaddress", 	&importstealthaddress, 	false, false},
+    {"sendtostealthaddress", 	&sendtostealthaddress, 	false, false},
+    {"scanforalltxns", 			&scanforalltxns, 		false, false},
+    {"scanforstealthtxns", 		&scanforstealthtxns, 	false, false},
+	
 	{ "smsgenable",             &smsgenable,             false,  false},
     { "smsgdisable",            &smsgdisable,            false,  false},
     { "smsglocalkeys",          &smsglocalkeys,          false,  false},
@@ -412,7 +419,7 @@ static string HTTPReply(int nStatus, const string& strMsg, bool keepalive)
             "HTTP/1.1 %d %s\r\n"
             "Date: %s\r\n"
             "Connection: %s\r\n"
-            "Content-Length: %"PRIszu"\r\n"
+            "Content-Length: %" PRIszu "\r\n"
             "Content-Type: application/json\r\n"
             "Server: DeepOnion-json-rpc/%s\r\n"
             "\r\n"
@@ -1115,6 +1122,16 @@ json_spirit::Value CRPCTable::execute(const std::string &strMethod, const json_s
     }
 }
 
+std::vector<std::string> CRPCTable::listCommands() const
+{
+    std::vector<std::string> commandList;
+    typedef std::map<std::string, const CRPCCommand*> commandMap;
+
+    std::transform( mapCommands.begin(), mapCommands.end(),
+                   std::back_inserter(commandList),
+                   boost::bind(&commandMap::value_type::first,_1) );
+    return commandList;
+}
 
 Object CallRPC(const string& strMethod, const Array& params)
 {
@@ -1205,6 +1222,7 @@ Array RPCConvertValues(const std::string &strMethod, const std::vector<std::stri
     //
     if (strMethod == "stop"                   && n > 0) ConvertTo<bool>(params[0]);
     if (strMethod == "sendtoaddress"          && n > 1) ConvertTo<double>(params[1]);
+    if (strMethod == "sendtostealthaddress"   && n > 1) ConvertTo<double>(params[1]);
     if (strMethod == "settxfee"               && n > 0) ConvertTo<double>(params[0]);
     if (strMethod == "getreceivedbyaddress"   && n > 1) ConvertTo<boost::int64_t>(params[1]);
     if (strMethod == "getreceivedbyaccount"   && n > 1) ConvertTo<boost::int64_t>(params[1]);
@@ -1217,6 +1235,7 @@ Array RPCConvertValues(const std::string &strMethod, const std::vector<std::stri
     if (strMethod == "getblockbynumber"       && n > 0) ConvertTo<boost::int64_t>(params[0]);
     if (strMethod == "getblockbynumber"       && n > 1) ConvertTo<bool>(params[1]);
     if (strMethod == "getblockhash"           && n > 0) ConvertTo<boost::int64_t>(params[0]);
+    if (strMethod == "getinfo"                && n > 0) ConvertTo<bool>(params[0]);
     if (strMethod == "move"                   && n > 2) ConvertTo<double>(params[2]);
     if (strMethod == "move"                   && n > 3) ConvertTo<boost::int64_t>(params[3]);
     if (strMethod == "sendfrom"               && n > 2) ConvertTo<double>(params[2]);
@@ -1251,6 +1270,8 @@ Array RPCConvertValues(const std::string &strMethod, const std::vector<std::stri
     if (strMethod == "createrawtransaction"   && n > 1) ConvertTo<Object>(params[1]);
     if (strMethod == "signrawtransaction"     && n > 1) ConvertTo<Array>(params[1], true);
     if (strMethod == "signrawtransaction"     && n > 2) ConvertTo<Array>(params[2], true);
+    if (strMethod == "scanforalltxns"         && n > 0) ConvertTo<boost::int64_t>(params[0]);
+    if (strMethod == "scanforstealthtxns"     && n > 0) ConvertTo<boost::int64_t>(params[0]);
     if (strMethod == "keypoolrefill"          && n > 0) ConvertTo<boost::int64_t>(params[0]);
 
     return params;

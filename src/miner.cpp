@@ -114,7 +114,6 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64_t* pFees)
     auto_ptr<CBlock> pblock(new CBlock());
     if (!pblock.get())
         return NULL;
-
     CBlockIndex* pindexPrev = pindexBest;
 
     // Create coinbase tx
@@ -355,7 +354,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64_t* pFees)
         nLastBlockSize = nBlockSize;
 
         if (fDebug && GetBoolArg("-printpriority"))
-            printf("CreateNewBlock(): total size %"PRIu64"\n", nBlockSize);
+            printf("CreateNewBlock(): total size %" PRIu64 "\n", nBlockSize);
 
         if (!fProofOfStake)
 			pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(pindexPrev->nHeight + 1, nFees, pindexPrev);

@@ -119,6 +119,12 @@ public:
      * @throws an exception (json_spirit::Value) when an error happens.
      */
     json_spirit::Value execute(const std::string &method, const json_spirit::Array &params) const;
+
+    /**
+    * Returns a list of registered commands
+    * @returns List of registered commands.
+    */
+    std::vector<std::string> listCommands() const;
 };
 
 extern const CRPCTable tableRPC;
@@ -222,7 +228,15 @@ extern json_spirit::Value getnetworkhashps(const json_spirit::Array& params, boo
 extern json_spirit::Value getlastanontxinfo(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value listservicenodes(const json_spirit::Array& params, bool fHelp);
 
-extern json_spirit::Value smsgenable(const json_spirit::Array& params, bool fHelp); // in rpcsmessage.cpp
+extern json_spirit::Value getnewstealthaddress(const json_spirit::Array &params, bool fHelp);
+extern json_spirit::Value liststealthaddresses(const json_spirit::Array &params, bool fHelp);
+extern json_spirit::Value importstealthaddress(const json_spirit::Array &params, bool fHelp);
+extern json_spirit::Value sendtostealthaddress(const json_spirit::Array &params, bool fHelp);
+extern json_spirit::Value clearwallettransactions(const json_spirit::Array &params, bool fHelp);
+extern json_spirit::Value scanforalltxns(const json_spirit::Array &params, bool fHelp);
+extern json_spirit::Value scanforstealthtxns(const json_spirit::Array &params, bool fHelp);
+
+extern json_spirit::Value smsgenable(const json_spirit::Array &params, bool fHelp); // in rpcsmessage.cpp
 extern json_spirit::Value smsgdisable(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value smsglocalkeys(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value smsgoptions(const json_spirit::Array& params, bool fHelp);
