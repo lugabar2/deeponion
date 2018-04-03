@@ -800,7 +800,7 @@ Value sendmany(const Array& params, bool fHelp)
 //
 // Used by addmultisigaddress / createmultisig:
 //
-static CScript _createmultisig(const Array& params)
+static CScript _createmultisig(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 2 || params.size() > 3)
     {
@@ -877,7 +877,7 @@ Value addmultisigaddress(const Array& params, bool fHelp)
         strAccount = AccountFromValue(params[2]);
 
     // Construct using pay-to-script-hash:
-    CScript inner = _createmultisig(params);
+    CScript inner = _createmultisig(params, fHelp);
     CScriptID innerID = inner.GetID();
     pwalletMain->AddCScript(inner);
 
@@ -899,7 +899,7 @@ Value createmultisig(const Array& params, bool fHelp)
     }
 
     // Construct using pay-to-script-hash:
-    CScript inner = _createmultisig(params);
+    CScript inner = _createmultisig(params, fHelp);
     CScriptID innerID = inner.GetID();
     CBitcoinAddress address(innerID);
 
